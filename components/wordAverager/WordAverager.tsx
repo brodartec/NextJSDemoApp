@@ -1,5 +1,7 @@
 import React, { useMemo, useState } from "react";
+import styles from "./WordAverager.module.css";
 import Button from "../core/button/Button";
+import { List, ListItem } from "../core/list";
 import TextInput from "../core/textInput/TextInput";
 
 type TextLine = {
@@ -56,7 +58,16 @@ const WordAverager = () => {
         <Button type="submit">Submit</Button>
       </form>
       <p>Average Number of Words: {avgWordCount}</p>
-      <div>{JSON.stringify(textLines)}</div>
+      <List>
+        {textLines.map((textLine) => (
+          <ListItem key={textLine.timeStamp}>
+            <div className={styles.textLine}>
+              <div>{textLine.content}</div>
+              <div>{textLine.timeStamp}</div>
+            </div>
+          </ListItem>
+        ))}
+      </List>
     </>
   );
 };

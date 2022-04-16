@@ -1,0 +1,14 @@
+.textLine {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin: 1rem 0 0 0;
+}
+
+.textLine div:first-child {
+  max-width: 70%;
+}
+.textLine div:last-child {
+  padding-left: 1rem;
+  max-width: 30%;
+}
