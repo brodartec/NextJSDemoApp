@@ -1,3 +1,7 @@
+html {
+  --primary-color: #01a95d; /* GFM Green */
+}
+
 html,
 body {
   padding: 0;

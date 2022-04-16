@@ -13,7 +13,12 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <AppContainer>
-        <AppHeader />
+        <AppHeader
+          links={[
+            { label: "A", path: "/PageA" },
+            { label: "B", path: "/PageB" },
+          ]}
+        />
         <ContentContainer>
           <Component {...pageProps} />
         </ContentContainer>
