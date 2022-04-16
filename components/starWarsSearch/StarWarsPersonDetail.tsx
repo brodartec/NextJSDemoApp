@@ -2,6 +2,7 @@ import { getSpecies, StarWarsPerson } from "../../services/starWarsApi";
 import styles from "./StarWarsPersonDetail.module.css";
 import { Modal } from "../core/modal";
 import { useQuery } from "react-query";
+import { Spinner } from "../core/spinner";
 
 type StarWarsPersonDetailProps = {
   person: StarWarsPerson;
@@ -12,13 +13,17 @@ const StarWarsPersonDetail = ({
   closeModal,
 }: StarWarsPersonDetailProps) => {
   const {
+    isLoading,
     isError,
     data: species,
   } = useQuery(["person", person.name], () => getSpecies(person), {
     refetchOnMount: false,
   });
+
   let content;
-  if (isError) {
+  if (isLoading) {
+    content = <Spinner />;
+  } else if (isError) {
     content = <div>Something went wrong while fetching species info.</div>;
   } else {
     content = <span>{`Species: ${species}`}</span>;

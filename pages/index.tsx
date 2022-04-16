@@ -5,8 +5,7 @@ const Home: NextPage = () => {
   const router = useRouter();
   useEffect(() => {
     // start user on PageA (Word Averager)
-    // TODO: Change this back to PageA when done working on PageB
-    router.push("/PageB");
+    router.push("/PageA");
   }, [router]);
   return null;
 };

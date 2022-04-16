@@ -7,8 +7,15 @@
 
 .textLine div:first-child {
   max-width: 70%;
+  /* prevent overflow when input is 1 super long word */
+  overflow-wrap: anywhere;
 }
 .textLine div:last-child {
   padding-left: 1rem;
   max-width: 30%;
+  color: var(--primary-color);
+}
+
+.avgWords {
+  color: var(--primary-color);
 }

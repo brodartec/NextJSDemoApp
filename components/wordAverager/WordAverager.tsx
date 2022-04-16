@@ -3,6 +3,7 @@ import styles from "./WordAverager.module.css";
 import Button from "../core/button/Button";
 import { List, ListItem } from "../core/list";
 import TextInput from "../core/textInput/TextInput";
+import formatDateTime from "./formatDateTime";
 
 type TextLine = {
   content: string;
@@ -10,12 +11,15 @@ type TextLine = {
   wordCount: number;
 };
 
+/**
+ * Search for people in the Star Wars universe by name, results rendered as the user types
+ */
 const WordAverager = () => {
-  const [textLines, setTextLines] = useState<TextLine[]>([]);
+  const [textLines, setTextLines] = useState<TextLine[]>([]); // lines submitted so far
   const [textInput, setTextInput] = useState(""); // current unsubmitted input
 
   const avgWordCount = useMemo(() => {
-    if (textLines.length === 0) return 0; // avoid dividing by zero :)
+    if (textLines.length === 0) return 0;
     const totalWords = textLines.reduce((total, curr) => {
       return total + curr.wordCount;
     }, 0);
@@ -28,7 +32,7 @@ const WordAverager = () => {
 
   const handleTextSubmitted = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const _textInput = textInput.trim(); // make sure its not just white space
+    const _textInput = textInput.trim();
     if (_textInput.length > 0) {
       // we'll calculate word count now, instead of on the fly when
       // finding the average in avgWordCount memo
@@ -39,7 +43,7 @@ const WordAverager = () => {
       }).length;
       const newTextLine = {
         content: textInput,
-        timeStamp: new Date().toISOString(), // TODO: format as YYYY-MM-DD HH:MM:SS
+        timeStamp: formatDateTime(new Date()),
         wordCount: wordCount,
       };
       setTextLines((prev) => [...prev, newTextLine]);
@@ -49,15 +53,19 @@ const WordAverager = () => {
 
   return (
     <>
-      <form onSubmit={handleTextSubmitted}>
+      <form className={styles.textInputForm} onSubmit={handleTextSubmitted}>
         <TextInput
           maxLength={200}
+          placeHolder="Enter Text"
           value={textInput}
           onChange={handleTextInputChanged}
         />
         <Button type="submit">Submit</Button>
       </form>
-      <p>Average Number of Words: {avgWordCount}</p>
+      <p>
+        Average Number of Words:{" "}
+        <strong className={styles.avgWords}>{avgWordCount}</strong>
+      </p>
       <List>
         {textLines.map((textLine) => (
           <ListItem key={textLine.timeStamp}>

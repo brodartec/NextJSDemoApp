@@ -5,6 +5,7 @@ import { TextInput } from "../core/textInput";
 import styles from "./StarWarsSearch.module.css";
 import StarWarsPersonDetail from "./StarWarsPersonDetail";
 import { useQuery } from "react-query";
+import { Spinner } from "../core/spinner";
 
 const StarWarsSearch = () => {
   /* searchInput is what the user types into the search bar, queryInput is what we feed into
@@ -12,28 +13,22 @@ const StarWarsSearch = () => {
     when the user is done typing */
   const [searchInput, setSearchInput] = useState("");
   const [queryInput, setQueryInput] = useState("");
+  const [selectedPerson, setSelectedPerson] = useState<StarWarsPerson | null>(
+    null
+  );
+
   const {
+    isLoading,
     isError,
     data: people = [],
     refetch,
   } = useQuery<StarWarsPerson[]>(["people", queryInput], () =>
     getPeople(queryInput)
   );
-  const [selectedPerson, setSelectedPerson] = useState<StarWarsPerson | null>(
-    null
-  );
-  const handleTextInputChanged = async (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
+
+  const handleTextInputChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.currentTarget.value);
   };
-
-  useEffect(() => {
-    const debouncedSetSearchQuery = setTimeout(() => {
-      setQueryInput(searchInput);
-    }, 250);
-    return () => clearTimeout(debouncedSetSearchQuery);
-  }, [searchInput, refetch]);
 
   const handlePersonClicked = (person: StarWarsPerson) => {
     setSelectedPerson(person);
@@ -43,8 +38,14 @@ const StarWarsSearch = () => {
     setSelectedPerson(null);
   }, [setSelectedPerson]);
 
+  useEffect(() => {
+    const debouncedSetSearchQuery = setTimeout(() => {
+      setQueryInput(searchInput);
+    }, 250);
+    return () => clearTimeout(debouncedSetSearchQuery);
+  }, [searchInput, refetch]);
+
   let results;
-  // TODO: implement & display a spinner while search is running
   if (isError) {
     results = (
       <div>Something went wrong while while fetching StarWars people.</div>
@@ -70,10 +71,12 @@ const StarWarsSearch = () => {
     <>
       <div className={styles.search}>
         <TextInput
+          maxLength={200}
           placeHolder="Search"
           value={searchInput}
           onChange={handleTextInputChanged}
         />
+        {isLoading && <Spinner />}
       </div>
       {results}
       {selectedPerson && (
