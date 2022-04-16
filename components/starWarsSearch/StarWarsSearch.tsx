@@ -6,12 +6,10 @@ import styles from "./StarWarsSearch.module.css";
 import StarWarsPersonDetail from "./StarWarsPersonDetail";
 import { useQuery } from "react-query";
 
-const PersonDetailModal = React.memo(
-  StarWarsPersonDetail,
-  (prevProps, nextProps) => prevProps?.person?.name === nextProps?.person?.name
-);
-
 const StarWarsSearch = () => {
+  /* searchInput is what the user types into the search bar, queryInput is what we feed into
+    the getPeople query. We want to debounce updates to queryInput so we only trigger the query
+    when the user is done typing */
   const [searchInput, setSearchInput] = useState("");
   const [queryInput, setQueryInput] = useState("");
   const {
@@ -79,7 +77,7 @@ const StarWarsSearch = () => {
       </div>
       {results}
       {selectedPerson && (
-        <PersonDetailModal
+        <StarWarsPersonDetail
           closeModal={handleCloseSpeciesModal}
           person={selectedPerson}
         />
