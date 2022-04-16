@@ -1,6 +1,7 @@
 {
   "name": "next-js-demo-app",
   "version": "0.1.0",
+  "author": "Ben Rodarte",
   "private": true,
   "scripts": {
     "dev": "next dev",
