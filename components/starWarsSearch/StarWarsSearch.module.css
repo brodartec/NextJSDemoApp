@@ -1,0 +1,13 @@
+.search {
+  display: flex;
+  align-items: center;
+}
+
+.personResult {
+  margin: 1rem 0 0 0;
+  cursor: pointer;
+}
+
+.personResult:hover {
+  color: var(--primary-color);
+}
