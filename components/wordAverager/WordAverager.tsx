@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import Button from "../core/button/Button";
 import TextInput from "../core/textInput/TextInput";
 
@@ -12,6 +12,14 @@ const WordAverager = () => {
   const [textLines, setTextLines] = useState<TextLine[]>([]);
   const [textInput, setTextInput] = useState(""); // current unsubmitted input
 
+  const avgWordCount = useMemo(() => {
+    if (textLines.length === 0) return 0; // avoid dividing by zero :)
+    const totalWords = textLines.reduce((total, curr) => {
+      return total + curr.wordCount;
+    }, 0);
+    return Math.round(totalWords / textLines.length);
+  }, [textLines]);
+
   const handleTextInputChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTextInput(e.currentTarget.value);
   };
@@ -20,10 +28,17 @@ const WordAverager = () => {
     e.preventDefault();
     const _textInput = textInput.trim(); // make sure its not just white space
     if (_textInput.length > 0) {
+      // we'll calculate word count now, instead of on the fly when
+      // finding the average in avgWordCount memo
+      const wordCount = _textInput.split(" ").filter((w) => {
+        // skip spaces and groups that don't contain any alphanumeric chars
+        // TODO: add handling for languages that don't use Latin alphabet
+        return w.length !== 0 && w.match(/\w+/g) !== null;
+      }).length;
       const newTextLine = {
         content: textInput,
         timeStamp: new Date().toISOString(), // TODO: format as YYYY-MM-DD HH:MM:SS
-        wordCount: 1, // TODO: calculate this
+        wordCount: wordCount,
       };
       setTextLines((prev) => [...prev, newTextLine]);
       setTextInput(""); // clear input
@@ -40,7 +55,7 @@ const WordAverager = () => {
         />
         <Button type="submit">Submit</Button>
       </form>
-      <p>Average Number of Words: </p>
+      <p>Average Number of Words: {avgWordCount}</p>
       <div>{JSON.stringify(textLines)}</div>
     </>
   );
