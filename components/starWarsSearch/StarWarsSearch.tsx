@@ -1,19 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { getPeople, StarWarsPerson } from "../../services/starWarsApi";
 import { List, ListItem } from "../core/list";
 import { TextInput } from "../core/textInput";
 import styles from "./StarWarsSearch.module.css";
+import StarWarsPersonDetail from "./StarWarsPersonDetail";
 import { useQuery } from "react-query";
 
+const PersonDetailModal = React.memo(
+  StarWarsPersonDetail,
+  (prevProps, nextProps) => prevProps?.person?.name === nextProps?.person?.name
+);
+
 const StarWarsSearch = () => {
-  const [searchInput, setSearchInput] = useState(""); // user input
-  const [queryInput, setQueryInput] = useState(""); // input used for API call -- updates are debounced
+  const [searchInput, setSearchInput] = useState("");
+  const [queryInput, setQueryInput] = useState("");
   const {
     isError,
     data: people = [],
     refetch,
   } = useQuery<StarWarsPerson[]>(["people", queryInput], () =>
     getPeople(queryInput)
+  );
+  const [selectedPerson, setSelectedPerson] = useState<StarWarsPerson | null>(
+    null
   );
   const handleTextInputChanged = async (
     e: React.ChangeEvent<HTMLInputElement>
@@ -23,16 +32,18 @@ const StarWarsSearch = () => {
 
   useEffect(() => {
     const debouncedSetSearchQuery = setTimeout(() => {
-      // user has finished typing, so we can update queryInput to trigger
-      // the getPeople query
       setQueryInput(searchInput);
     }, 250);
     return () => clearTimeout(debouncedSetSearchQuery);
   }, [searchInput, refetch]);
 
   const handlePersonClicked = (person: StarWarsPerson) => {
-    console.log(`PERSON CLICKED: ${person.name}`);
+    setSelectedPerson(person);
   };
+
+  const handleCloseSpeciesModal = useCallback(() => {
+    setSelectedPerson(null);
+  }, [setSelectedPerson]);
 
   let results;
   // TODO: implement & display a spinner while search is running
@@ -67,6 +78,12 @@ const StarWarsSearch = () => {
         />
       </div>
       {results}
+      {selectedPerson && (
+        <PersonDetailModal
+          closeModal={handleCloseSpeciesModal}
+          person={selectedPerson}
+        />
+      )}
     </>
   );
 };

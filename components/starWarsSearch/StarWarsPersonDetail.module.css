@@ -1,0 +1,22 @@
+.speciesInfo {
+  padding: 0.5rem 1rem;
+  background-color: white;
+  height: 20rem;
+  width: 25rem;
+}
+
+.personName {
+  color: var(--primary-color);
+  margin: 0;
+}
+
+.detailsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.closeIcon {
+  cursor: pointer;
+}
