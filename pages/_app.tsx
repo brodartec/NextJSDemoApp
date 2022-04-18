@@ -13,7 +13,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(
     new QueryClient({
       defaultOptions: {
-        /* since API is ready only we don't have to revalidate the cache as aggressively */
+        /* since API is read only we don't have to revalidate the cache as aggressively */
         queries: {
           staleTime: TEN_MINUTES_IN_MS,
           cacheTime: TEN_MINUTES_IN_MS,

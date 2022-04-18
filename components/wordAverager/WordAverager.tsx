@@ -12,7 +12,7 @@ type TextLine = {
 };
 
 /**
- * Search for people in the Star Wars universe by name, results rendered as the user types
+ * Input and submit lines of text, average word count displayed/updated dynamically
  */
 const WordAverager = () => {
   const [textLines, setTextLines] = useState<TextLine[]>([]); // lines submitted so far

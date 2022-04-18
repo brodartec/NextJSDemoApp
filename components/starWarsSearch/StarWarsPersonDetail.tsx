@@ -8,6 +8,10 @@ type StarWarsPersonDetailProps = {
   person: StarWarsPerson;
   closeModal: () => void;
 };
+
+/**
+ * Fetch and display the species for the passed in StarWarsPerson
+ */
 const StarWarsPersonDetail = ({
   person,
   closeModal,
@@ -16,9 +20,7 @@ const StarWarsPersonDetail = ({
     isLoading,
     isError,
     data: species,
-  } = useQuery(["person", person.name], () => getSpecies(person), {
-    refetchOnMount: false,
-  });
+  } = useQuery(["person", person.name], () => getSpecies(person));
 
   let content;
   if (isLoading) {

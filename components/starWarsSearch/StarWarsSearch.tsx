@@ -7,6 +7,9 @@ import StarWarsPersonDetail from "./StarWarsPersonDetail";
 import { useQuery } from "react-query";
 import { Spinner } from "../core/spinner";
 
+/**
+ * Search for people in the Star Wars universe by name, results rendered as the user types
+ */
 const StarWarsSearch = () => {
   /* searchInput is what the user types into the search bar, queryInput is what we feed into
     the getPeople query. We want to debounce updates to queryInput so we only trigger the query
